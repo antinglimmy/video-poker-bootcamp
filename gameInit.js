@@ -113,13 +113,6 @@ player1ButtonClick = () => {
     cardContainer.appendChild(cardElement);
 
     playersTurn = 2;
-
-    cardElement.addEventListener("click", () => {
-      console.log(cardElement);
-      console.log(player1Card);
-      player1Cards.splice(player1Card);
-      // squareClick(i, j);
-    });
   }
 };
 
