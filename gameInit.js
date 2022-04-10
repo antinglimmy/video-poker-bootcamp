@@ -75,6 +75,7 @@ const makeDeck = () => {
 
 const deck = shuffleCards(makeDeck());
 
+/* eslint-disable */
 const createCard = (cardInfo) => {
   const suit = document.createElement("div");
   suit.classList.add("suit");
@@ -87,11 +88,23 @@ const createCard = (cardInfo) => {
   const card = document.createElement("div");
   card.classList.add("card");
 
+  const hold = document.createElement("div");
+  hold.classList.add("hold");
+  hold.innerText = "";
+  for (let i = 0; i < playerDiscardedCardsIndex; i++) {
+    if (playerDiscardedCardsIndex.includes(i)) {
+      name.innerText = "test";
+      console.log("im working");
+    }
+  }
+
+  card.appendChild(hold);
   card.appendChild(name);
   card.appendChild(suit);
 
   return card;
 };
+/* eslint-enable */
 
 // Create a helper function for output to abstract complexity of DOM manipulation away from game logic
 const output = (message) => {
@@ -99,50 +112,80 @@ const output = (message) => {
 };
 
 // Use let for player1Card object because player1Card will be reassigned
-
+let playerCardsElements = [];
+let gameState = "dealing cards";
 let cardElement;
 player1ButtonClick = () => {
-  if (playersTurn === 1) {
+  // if (gameState === "dealing cards") {
+  for (let i = 0; i < 5; i++) {
     player1Card = deck.pop();
     player1Cards.push(player1Card);
     player1Score += player1Cards[player1Cards.length - 1].rank;
     console.log(player1Score);
 
     cardElement = createCard(player1Card);
+    playerCardsElements[i] = cardElement;
+
     // Append the card element to the card container
     cardContainer.appendChild(cardElement);
-
-    playersTurn = 2;
   }
+
+  for (let i = 0; i < 5; i++) {
+    playerCardsElements[i].addEventListener("click", () => {
+      holdCard(i);
+      playerCardsElements[i].classList.toggle("flipcard");
+      playerCardsElements[i].innerText = "Hold";
+    });
+  }
+  // cardElement.addEventListener("click", () => {
+  //   holdCard(i);
+  //   cardElement.classList.toggle("flipcard");
+  // });
+
+  // } else if (gameState === "discarding cards") {
+  //   for (let i = 0; i < player1Cards.length; i++) {
+  //     if (player1Cards[i] === "") {
+  //       player1Card = deck.pop();
+  //       player1Cards[i] = player1Card;
+  //       // player1Score += player1Cards[player1Cards.length - 1].rank;
+  //       // console.log(player1Score);
+
+  //       cardElement = createCard(player1Card);
+  //       // Append the card element to the card container
+  //       cardContainer.appendChild(cardElement);
+  //     }
+  //   }
+  // }
 };
 
-player2ButtonClick = () => {
-  if (playersTurn === 2) {
-    player2Card = deck.pop();
-    player2Cards.push(player2Card);
-    player2Score += player2Cards[player2Cards.length - 1].rank;
-    console.log(player2Score);
+const holdCard = (i) => {
+  console.log(player1Cards[i]);
+  playerDiscardedCards.push(player1Cards[i]);
+  playerDiscardedCardsIndex.push(i);
+  createCard(player1Cards[i]);
+  console.log(player1Cards);
+  console.log(playerDiscardedCards);
+  player1Cards[i] = "";
 
-    const cardElement = createCard(player2Card);
-    // Append the card element to the card container
-    cardContainer.appendChild(cardElement);
-
-    playersTurn = 1;
-  }
+  gameState = "discarding cards";
 };
+
+// const removeCards = () => {
+//   let removeSuit = player1Cards[i].suit;
+//   let removeName = player1Cards[i].name;
+//   for (let i = 0; i < 5; i++) {
+//     let manuf = player1Cards[i];
+//     $(":contains('" + manuf + "')").remove();
+//   }
+// };
 
 const initGame = () => {
   // create two buttons
   const player1Button = document.createElement("button");
-  player1Button.innerText = "Player 1 Draw";
+  player1Button.innerText = "Deal";
   document.body.appendChild(player1Button);
 
   player1Button.addEventListener("click", player1ButtonClick);
-
-  const player2Button = document.createElement("button");
-  player2Button.innerText = "Player 2 Draw";
-  document.body.appendChild(player2Button);
-  player2Button.addEventListener("click", player2ButtonClick);
 
   // Create game info div as global value
   // fill game info div with starting instructions
