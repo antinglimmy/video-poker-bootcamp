@@ -75,7 +75,6 @@ const makeDeck = () => {
 
 const deck = shuffleCards(makeDeck());
 
-/* eslint-disable */
 const createCard = (cardInfo) => {
   const suit = document.createElement("div");
   suit.classList.add("suit");
@@ -88,27 +87,23 @@ const createCard = (cardInfo) => {
   const card = document.createElement("div");
   card.classList.add("card");
 
-  const hold = document.createElement("div");
-  hold.classList.add("hold");
-  hold.innerText = "";
-  for (let i = 0; i < playerDiscardedCardsIndex; i++) {
-    if (playerDiscardedCardsIndex.includes(i)) {
-      name.innerText = "test";
-      console.log("im working");
-    }
-  }
-
-  card.appendChild(hold);
   card.appendChild(name);
   card.appendChild(suit);
 
   return card;
 };
-/* eslint-enable */
 
 // Create a helper function for output to abstract complexity of DOM manipulation away from game logic
 const output = (message) => {
   gameInfo.innerText = message;
+};
+
+const calPlayerScore = () => {
+  player1Score = 0;
+  for (let i = 0; i < player1Cards.length; i++) {
+    player1Score += player1Cards[i].rank;
+    console.log(player1Score);
+  }
 };
 
 // Use let for player1Card object because player1Card will be reassigned
@@ -120,8 +115,7 @@ player1ButtonClick = () => {
   for (let i = 0; i < 5; i++) {
     player1Card = deck.pop();
     player1Cards.push(player1Card);
-    player1Score += player1Cards[player1Cards.length - 1].rank;
-    console.log(player1Score);
+    calPlayerScore();
 
     cardElement = createCard(player1Card);
     playerCardsElements[i] = cardElement;
@@ -137,25 +131,6 @@ player1ButtonClick = () => {
       playerCardsElements[i].innerText = "Hold";
     });
   }
-  // cardElement.addEventListener("click", () => {
-  //   holdCard(i);
-  //   cardElement.classList.toggle("flipcard");
-  // });
-
-  // } else if (gameState === "discarding cards") {
-  //   for (let i = 0; i < player1Cards.length; i++) {
-  //     if (player1Cards[i] === "") {
-  //       player1Card = deck.pop();
-  //       player1Cards[i] = player1Card;
-  //       // player1Score += player1Cards[player1Cards.length - 1].rank;
-  //       // console.log(player1Score);
-
-  //       cardElement = createCard(player1Card);
-  //       // Append the card element to the card container
-  //       cardContainer.appendChild(cardElement);
-  //     }
-  //   }
-  // }
 };
 
 const holdCard = (i) => {
@@ -166,18 +141,20 @@ const holdCard = (i) => {
   console.log(player1Cards);
   console.log(playerDiscardedCards);
   player1Cards[i] = "";
+  for (let i = 0; i < player1Cards.length; i++) {
+    if (player1Cards[i] === "") {
+      player1Card = deck.pop();
+      player1Cards[i] = player1Card;
 
-  gameState = "discarding cards";
+      cardElement = createCard(player1Card);
+      // Append the card element to the card container
+      cardContainer.appendChild(cardElement);
+    }
+  }
+  calPlayerScore();
+
+  // gameState = "discarding cards";
 };
-
-// const removeCards = () => {
-//   let removeSuit = player1Cards[i].suit;
-//   let removeName = player1Cards[i].name;
-//   for (let i = 0; i < 5; i++) {
-//     let manuf = player1Cards[i];
-//     $(":contains('" + manuf + "')").remove();
-//   }
-// };
 
 const initGame = () => {
   // create two buttons
@@ -190,7 +167,7 @@ const initGame = () => {
   // Create game info div as global value
   // fill game info div with starting instructions
   const gameInfo = document.createElement("div");
-  gameInfo.innerText = "Its player 1 turn. Click to draw a card!";
+  gameInfo.innerText = "Click draw to draw 5 cards";
   document.body.appendChild(gameInfo);
 
   cardContainer = document.createElement("div");
