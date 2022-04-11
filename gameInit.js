@@ -108,57 +108,93 @@ const calPlayerScore = () => {
 
 // Use let for player1Card object because player1Card will be reassigned
 let playerCardsElements = [];
+let playerCardsElementsHold = [];
 let gameState = "dealing cards";
 let cardElement;
 player1ButtonClick = () => {
-  // if (gameState === "dealing cards") {
-  for (let i = 0; i < 5; i++) {
-    player1Card = deck.pop();
-    player1Cards.push(player1Card);
-    calPlayerScore();
-
-    cardElement = createCard(player1Card);
-    playerCardsElements[i] = cardElement;
-
-    // Append the card element to the card container
-    cardContainer.appendChild(cardElement);
-  }
-
-  for (let i = 0; i < 5; i++) {
-    playerCardsElements[i].addEventListener("click", () => {
-      holdCard(i);
-      playerCardsElements[i].classList.toggle("flipcard");
-      playerCardsElements[i].innerText = "Hold";
-    });
-  }
-};
-
-const holdCard = (i) => {
-  console.log(player1Cards[i]);
-  playerDiscardedCards.push(player1Cards[i]);
-  playerDiscardedCardsIndex.push(i);
-  createCard(player1Cards[i]);
-  console.log(player1Cards);
-  console.log(playerDiscardedCards);
-  player1Cards[i] = "";
-  for (let i = 0; i < player1Cards.length; i++) {
-    if (player1Cards[i] === "") {
+  if (gameState === "dealing cards") {
+    for (let i = 0; i < 5; i++) {
       player1Card = deck.pop();
-      player1Cards[i] = player1Card;
+      player1Cards.push(player1Card);
+      calPlayerScore();
 
       cardElement = createCard(player1Card);
+      playerCardsElements[i] = cardElement;
+
       // Append the card element to the card container
       cardContainer.appendChild(cardElement);
+      gameState = "choosing cards to hold";
     }
   }
-  calPlayerScore();
+  if (gameState === "choosing cards to hold") {
+    for (let i = 0; i < 5; i++) {
+      playerCardsElements[i].addEventListener("click", () => {
+        playerCardsElementsHold[i] = playerCardsElements[i];
+        console.log(player1Cards[i]);
+        playerDiscardedCards.push(player1Cards[i]);
+        playerDiscardedCardsIndex.push(i);
+        createCard(player1Cards[i]);
+        console.log(player1Cards);
+        console.log(playerDiscardedCards);
+        player1Cards[i] = "";
+        playerCardsElements[i].classList.toggle("flipcard");
+        playerCardsElements[i].innerText = "Hold";
+      });
+    }
+    gameState = "replacing cards";
+  }
+  if (gameState === "replacing cards") {
+    // for (let i = 0; i < 5; i++) {
+    //   playerCardsElements[i].addEventListener("click", () => {
+    for (let i = 0; i < player1Cards.length; i++) {
+      if (player1Cards[i] === "") {
+        player1Card = deck.pop();
+        player1Cards[i] = player1Card;
 
-  // gameState = "discarding cards";
+        cardElement = createCard(player1Card);
+        // Append the card element to the card container
+        cardContainer.appendChild(cardElement);
+      }
+    }
+
+    // for (let i = 0; i < playerCardsElements.length; i++) {
+    //   if ((playerCardsElements[i].innerText = "Hold")) {
+    //     console.log(playerCardsElements[i]);
+    //   }
+    // }
+    calPlayerScore();
+    // });
+  }
+  // }
 };
+
+// const holdCard = (i) => {
+//   console.log(player1Cards[i]);
+//   playerDiscardedCards.push(player1Cards[i]);
+//   playerDiscardedCardsIndex.push(i);
+//   createCard(player1Cards[i]);
+//   console.log(player1Cards);
+//   console.log(playerDiscardedCards);
+//   player1Cards[i] = "";
+//   for (let i = 0; i < player1Cards.length; i++) {
+//     if (player1Cards[i] === "") {
+//       player1Card = deck.pop();
+//       player1Cards[i] = player1Card;
+
+//       cardElement = createCard(player1Card);
+//       // Append the card element to the card container
+//       cardContainer.appendChild(cardElement);
+//     }
+//   }
+//   calPlayerScore();
+
+// gameState = "discarding cards";
+// };
 
 const initGame = () => {
   // create two buttons
   const player1Button = document.createElement("button");
+  player1Button.classList.add("button");
   player1Button.innerText = "Deal";
   document.body.appendChild(player1Button);
 
