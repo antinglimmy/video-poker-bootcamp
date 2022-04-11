@@ -102,7 +102,7 @@ const calPlayerScore = () => {
   player1Score = 0;
   for (let i = 0; i < player1Cards.length; i++) {
     player1Score += player1Cards[i].rank;
-    console.log(player1Score);
+    console.log("player score=>", player1Score);
   }
 };
 
@@ -111,6 +111,7 @@ let playerCardsElements = [];
 let playerCardsElementsHold = [];
 let gameState = "dealing cards";
 let cardElement;
+let player1CardNew;
 player1ButtonClick = () => {
   if (gameState === "dealing cards") {
     for (let i = 0; i < 5; i++) {
@@ -118,48 +119,50 @@ player1ButtonClick = () => {
       player1Cards.push(player1Card);
       calPlayerScore();
 
-      cardElement = createCard(player1Card);
-      playerCardsElements[i] = cardElement;
+      playerCardsElements[i] = createCard(player1Card);
 
       // Append the card element to the card container
-      cardContainer.appendChild(cardElement);
+      cardContainer.appendChild(playerCardsElements[i]);
       gameState = "choosing cards to hold";
     }
   }
   if (gameState === "choosing cards to hold") {
     for (let i = 0; i < 5; i++) {
       playerCardsElements[i].addEventListener("click", () => {
-        playerCardsElementsHold[i] = playerCardsElements[i];
-        console.log(player1Cards[i]);
-        playerDiscardedCards.push(player1Cards[i]);
-        playerDiscardedCardsIndex.push(i);
-        createCard(player1Cards[i]);
-        console.log(player1Cards);
-        console.log(playerDiscardedCards);
+        // playerCardsElementsHold[i] = playerCardsElements[i];
+        playerDiscardedCards.push(playerCardsElements[i]);
+        // playerDiscardedCardsIndex.push(i);
+        // createCard(player1Cards[i]);
+        console.log("player 1 cards =>", player1Cards);
+        console.log("player discarded cards=>", playerDiscardedCards);
         player1Cards[i] = "";
         playerCardsElements[i].classList.toggle("flipcard");
         playerCardsElements[i].innerText = "Hold";
       });
     }
     gameState = "replacing cards";
-  }
-  if (gameState === "replacing cards") {
+  } else if (gameState === "replacing cards") {
     // for (let i = 0; i < 5; i++) {
     //   playerCardsElements[i].addEventListener("click", () => {
-    for (let i = 0; i < player1Cards.length; i++) {
-      if (player1Cards[i] === "") {
-        player1Card = deck.pop();
-        player1Cards[i] = player1Card;
 
-        cardElement = createCard(player1Card);
-        // Append the card element to the card container
+    for (let i = 0; i < playerCardsElements.length; i++) {
+      if (playerCardsElements[i].innerText === "Hold") {
+        playerCardsElements[i].remove();
+        playerCardsElements[i] = deck.pop();
+
+        cardElement = createCard(playerCardsElements[i]);
         cardContainer.appendChild(cardElement);
       }
     }
 
-    // for (let i = 0; i < playerCardsElements.length; i++) {
-    //   if ((playerCardsElements[i].innerText = "Hold")) {
-    //     console.log(playerCardsElements[i]);
+    // for (let i = 0; i < player1Cards.length; i++) {
+    //   if (player1Cards[i] === "") {
+    //     player1CardNew = deck.pop();
+    //     player1Cards[i] = player1CardNew;
+
+    //     cardElement = createCard(player1CardNew);
+    //     cardContainer.appendChild(cardElement);
+    //     console.log("new cards", cardElement);
     //   }
     // }
     calPlayerScore();
