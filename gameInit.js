@@ -68,8 +68,16 @@ const makeDeck = () => {
       newDeck.push(card);
     }
   }
+  const wildCard = {
+    name: "joker",
+    suit: "joker",
+    rank: 14,
+  };
+
+  newDeck.push(wildCard);
 
   // Return the completed card deck
+  // console.table(newDeck);
   return newDeck;
 };
 
@@ -98,13 +106,86 @@ const output = (message) => {
   gameInfo.innerText = message;
 };
 
+let cardNameTally = {};
+let cardSuitTally = {};
+let playerCardsRank = [];
 const calPlayerScore = () => {
   player1Score = 0;
-  for (let i = 0; i < player1Cards.length; i++) {
-    player1Score += player1Cards[i].rank;
-    console.log("player score=>", player1Score);
+
+  // Loop over hand
+  for (let i = 0; i < playerTestHandStraightFlush.length; i += 1) {
+    let cardName = playerTestHandStraightFlush[i].name;
+    let cardSuit = playerTestHandStraightFlush[i].suit;
+    // If we have seen the card name before, increment its count
+    if (cardName in cardNameTally) {
+      cardNameTally[cardName] += 1;
+    }
+    // Else, initialise count of this card name to 1
+    else {
+      cardNameTally[cardName] = 1;
+    }
+    if (cardSuit in cardSuitTally) {
+      cardSuitTally[cardSuit] += 1;
+    }
+    // Else, initialise count of this card name to 1
+    else {
+      cardSuitTally[cardSuit] = 1;
+    }
   }
+
+  for (let i = 0; i < playerTestHandStraightFlush.length; i += 1) {
+    playerCardsRank.push(playerTestHandStraightFlush[i].rank);
+  }
+  playerCardsRank.sort(function (a, b) {
+    return a - b;
+  });
+  console.log(playerCardsRank);
+
+  //Five of a kind win condition
+  let fiveKind = "";
+  for (cardName in cardNameTally) {
+    if (cardNameTally[cardName] === 4) {
+      console.log("five of a kind first half");
+      fiveKind = "half";
+    }
+  }
+  for (cardName in cardNameTally) {
+    if (fiveKind === "half" && cardName === "joker") {
+      console.log("five of a kind");
+    }
+  }
+
+  //Straight flush win condition
+  let straightFlush = "";
+  for (cardSuit in cardSuitTally) {
+    if (cardSuitTally[cardSuit] === 5) {
+      console.log("straight flush first half");
+      straightFlush = "half";
+    }
+  }
+
+  if (
+    straightFlush === "half" &&
+    playerCardsRank[length - 1] - playerCardsRank[0] === 4
+  ) {
+    console.log("straight flush");
+  }
+
+  // for (cardSuit in cardSuitTally) {
+  //   console.log(
+  //     `There are ${cardSuitTally[cardSuit]} ${cardSuit}s in the hand`
+  //   );
+  // }
+
+  // for (let i = 0; i < cardNameTally.length; i += 1) {
+  // if (cardNameTally[cardName])
+
+  // for (let i = 0; i < player1Cards.length; i++) {
+  //   player1Score += player1Cards[i].rank;
+  // }
+  // console.log(player1Score);
 };
+calPlayerScore();
 
 // Use let for player1Card object because player1Card will be reassigned
 let playerCardsElements = [];
@@ -117,16 +198,15 @@ player1ButtonClick = () => {
     for (let i = 0; i < 5; i++) {
       player1Card = deck.pop();
       player1Cards.push(player1Card);
-      calPlayerScore();
 
       playerCardsElements[i] = createCard(player1Card);
 
       // Append the card element to the card container
       cardContainer.appendChild(playerCardsElements[i]);
-      gameState = "choosing cards to hold";
     }
+    gameState = "choosing cards to discard";
   }
-  if (gameState === "choosing cards to hold") {
+  if (gameState === "choosing cards to discard") {
     for (let i = 0; i < 5; i++) {
       playerCardsElements[i].addEventListener("click", () => {
         // playerCardsElementsHold[i] = playerCardsElements[i];
@@ -137,7 +217,7 @@ player1ButtonClick = () => {
         console.log("player discarded cards=>", playerDiscardedCards);
         player1Cards[i] = "";
         playerCardsElements[i].classList.toggle("flipcard");
-        playerCardsElements[i].innerText = "Hold";
+        playerCardsElements[i].innerText = "Discard";
       });
     }
     gameState = "replacing cards";
@@ -146,14 +226,18 @@ player1ButtonClick = () => {
     //   playerCardsElements[i].addEventListener("click", () => {
 
     for (let i = 0; i < playerCardsElements.length; i++) {
-      if (playerCardsElements[i].innerText === "Hold") {
+      if (playerCardsElements[i].innerText === "Discard") {
         playerCardsElements[i].remove();
-        playerCardsElements[i] = deck.pop();
+        player1CardNew = deck.pop();
+        player1Cards[i] = player1CardNew;
+        console.log(player1CardNew);
 
-        cardElement = createCard(playerCardsElements[i]);
-        cardContainer.appendChild(cardElement);
+        playerCardsElements[i] = createCard(player1CardNew);
+        console.log(playerCardsElements[i]);
+        cardContainer.appendChild(playerCardsElements[i]);
       }
     }
+    gameState = "after deal";
 
     // for (let i = 0; i < player1Cards.length; i++) {
     //   if (player1Cards[i] === "") {
@@ -166,6 +250,7 @@ player1ButtonClick = () => {
     //   }
     // }
     calPlayerScore();
+    console.log("player score", player1Score);
     // });
   }
   // }
