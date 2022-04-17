@@ -49,6 +49,7 @@ const makeDeck = () => {
       // If rank is 1, 11, 12, or 13, set cardName to the ace or face card's name
       if (cardName === "1") {
         cardName = "ace";
+        rankCounter = 14;
       } else if (cardName === "11") {
         cardName = "jack";
       } else if (cardName === "12") {
@@ -113,9 +114,9 @@ const calPlayerScore = () => {
   player1Score = 0;
 
   // Loop over hand
-  for (let i = 0; i < playerTestHandStraightFlush.length; i += 1) {
-    let cardName = playerTestHandStraightFlush[i].name;
-    let cardSuit = playerTestHandStraightFlush[i].suit;
+  for (let i = 0; i < player1Cards.length; i += 1) {
+    let cardName = player1Cards[i].name;
+    let cardSuit = player1Cards[i].suit;
     // If we have seen the card name before, increment its count
     if (cardName in cardNameTally) {
       cardNameTally[cardName] += 1;
@@ -133,61 +134,89 @@ const calPlayerScore = () => {
     }
   }
 
-  for (let i = 0; i < playerTestHandStraightFlush.length; i += 1) {
-    playerCardsRank.push(playerTestHandStraightFlush[i].rank);
+  for (let i = 0; i < player1Cards.length; i += 1) {
+    playerCardsRank.push(player1Cards[i].rank);
   }
   playerCardsRank.sort(function (a, b) {
     return a - b;
   });
   console.log(playerCardsRank);
 
-  //Five of a kind win condition
+  //Four of a kind win condition
   let fiveKind = "";
   for (cardName in cardNameTally) {
     if (cardNameTally[cardName] === 4) {
-      console.log("five of a kind first half");
+      console.log("four of a kind");
       fiveKind = "half";
     }
   }
+
+  //Five of a kind win condition
   for (cardName in cardNameTally) {
     if (fiveKind === "half" && cardName === "joker") {
       console.log("five of a kind");
     }
   }
 
-  //Straight flush win condition
+  //Flush win condition
   let straightFlush = "";
   for (cardSuit in cardSuitTally) {
     if (cardSuitTally[cardSuit] === 5) {
-      console.log("straight flush first half");
+      console.log("flush");
       straightFlush = "half";
     }
   }
-
+  //Straight flush win condition
   if (
     straightFlush === "half" &&
-    playerCardsRank[length - 1] - playerCardsRank[0] === 4
+    playerCardsRank[playerCardsRank.length - 1] - playerCardsRank[0] === 4
   ) {
     console.log("straight flush");
   }
 
-  // for (cardSuit in cardSuitTally) {
-  //   console.log(
-  //     `There are ${cardSuitTally[cardSuit]} ${cardSuit}s in the hand`
-  //   );
-  // }
+  //Straight win condition
+  if (playerCardsRank[playerCardsRank.length - 1] - playerCardsRank[0] === 4) {
+    console.log("straight");
+  }
 
-  // for (let i = 0; i < cardNameTally.length; i += 1) {
-  // if (cardNameTally[cardName])
+  //Three of a kind win conditions
+  let fullHouse = "";
+  for (cardName in cardNameTally) {
+    if (cardNameTally[cardName] === 3) {
+      console.log("three of a kind");
+      fullHouse = "half";
+    }
+  }
+
+  //Full house win conditions
+  for (cardName in cardNameTally) {
+    if (fullHouse === "half" && cardNameTally[cardName] === 2) {
+      console.log("full house");
+    }
+  }
+
+  //Two pair win condition
+  let twoPair = 0;
+  for (cardName in cardNameTally) {
+    if (cardNameTally[cardName] === 2) {
+      twoPair += 1;
+    }
+  }
+  if (twoPair === 2) {
+    console.log("two pair");
+  }
+
+  //One pair win condition
+  if (twoPair === 1) {
+    console.log("one pair");
+  }
 
   // for (let i = 0; i < player1Cards.length; i++) {
   //   player1Score += player1Cards[i].rank;
   // }
   // console.log(player1Score);
 };
-calPlayerScore();
 
-// Use let for player1Card object because player1Card will be reassigned
 let playerCardsElements = [];
 let playerCardsElementsHold = [];
 let gameState = "dealing cards";
@@ -239,21 +268,9 @@ player1ButtonClick = () => {
     }
     gameState = "after deal";
 
-    // for (let i = 0; i < player1Cards.length; i++) {
-    //   if (player1Cards[i] === "") {
-    //     player1CardNew = deck.pop();
-    //     player1Cards[i] = player1CardNew;
-
-    //     cardElement = createCard(player1CardNew);
-    //     cardContainer.appendChild(cardElement);
-    //     console.log("new cards", cardElement);
-    //   }
-    // }
     calPlayerScore();
     console.log("player score", player1Score);
-    // });
   }
-  // }
 };
 
 // const holdCard = (i) => {
@@ -280,7 +297,6 @@ player1ButtonClick = () => {
 // };
 
 const initGame = () => {
-  // create two buttons
   const player1Button = document.createElement("button");
   player1Button.classList.add("button");
   player1Button.innerText = "Deal";
@@ -300,3 +316,14 @@ const initGame = () => {
 };
 
 initGame();
+
+//Reset game
+// const resetButton = document.createElement("button");
+// resetButton.classList.add("button");
+// resetButton.innerText = "Reset";
+// document.body.appendChild(resetButton);
+// resetButton.addEventListener("click", () => {
+//   cardContainer.innerHTML = "";
+//   deck = shuffleCards(makeDeck());
+//   initGame();
+// });
