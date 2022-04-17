@@ -1,11 +1,20 @@
 //To-do
 //- refactor code
 //Add JSDoc
+//order of cards when discarded
 /**
  * A function that sums numbers
  * @param  player1ButtonClick {function} Draws a card, displays it and calculates the total score
  * @return {number}
  */
+
+const gameInfo = document.createElement("div");
+gameInfo.innerText = "Click draw";
+player1Button = document.createElement("button");
+player1Button.classList.add("button");
+player1Button.innerText = "Deal";
+cardContainer = document.createElement("div");
+cardContainer.classList.add("card-container");
 
 // Get a random index ranging from 0 (inclusive) to max (exclusive).
 const getRandomIndex = (max) => Math.floor(Math.random() * max);
@@ -49,7 +58,6 @@ const makeDeck = () => {
       // If rank is 1, 11, 12, or 13, set cardName to the ace or face card's name
       if (cardName === "1") {
         cardName = "ace";
-        rankCounter = 14;
       } else if (cardName === "11") {
         cardName = "jack";
       } else if (cardName === "12") {
@@ -72,7 +80,7 @@ const makeDeck = () => {
   const wildCard = {
     name: "joker",
     suit: "joker",
-    rank: 14,
+    rank: 15,
   };
 
   newDeck.push(wildCard);
@@ -82,7 +90,7 @@ const makeDeck = () => {
   return newDeck;
 };
 
-const deck = shuffleCards(makeDeck());
+let deck = shuffleCards(makeDeck());
 
 const createCard = (cardInfo) => {
   const suit = document.createElement("div");
@@ -110,6 +118,8 @@ const output = (message) => {
 let cardNameTally = {};
 let cardSuitTally = {};
 let playerCardsRank = [];
+let hasAce = "no";
+let result = "";
 const calPlayerScore = () => {
   player1Score = 0;
 
@@ -132,6 +142,11 @@ const calPlayerScore = () => {
     else {
       cardSuitTally[cardSuit] = 1;
     }
+
+    if (cardName === "ace") {
+      hasAce = "yes";
+      console.log(hasAce);
+    }
   }
 
   for (let i = 0; i < player1Cards.length; i += 1) {
@@ -148,6 +163,8 @@ const calPlayerScore = () => {
     if (cardNameTally[cardName] === 4) {
       console.log("four of a kind");
       fiveKind = "half";
+      output("You got four of a kind!");
+      result = "yes";
     }
   }
 
@@ -155,6 +172,8 @@ const calPlayerScore = () => {
   for (cardName in cardNameTally) {
     if (fiveKind === "half" && cardName === "joker") {
       console.log("five of a kind");
+      output("You got five of a kind!");
+      result = "yes";
     }
   }
 
@@ -164,19 +183,49 @@ const calPlayerScore = () => {
     if (cardSuitTally[cardSuit] === 5) {
       console.log("flush");
       straightFlush = "half";
+      console.log(straightFlush);
+      output("You got a flush");
+      result = "yes";
     }
   }
   //Straight flush win condition
   if (
     straightFlush === "half" &&
-    playerCardsRank[playerCardsRank.length - 1] - playerCardsRank[0] === 4
+    playerCardsRank[playerCardsRank.length - 1] - playerCardsRank[1] === 4
   ) {
     console.log("straight flush");
+    output("You got a straight flush");
+    result = "yes";
+  }
+
+  if (
+    straightFlush === "half" &&
+    playerCardsRank[playerCardsRank.length - 1] === 13 &&
+    playerCardsRank[1] === 10 &&
+    hasAce === "yes"
+  ) {
+    console.log("king high flush");
+    output("You got a king high flush!");
+    result = "yes";
   }
 
   //Straight win condition
-  if (playerCardsRank[playerCardsRank.length - 1] - playerCardsRank[0] === 4) {
+  if (
+    playerCardsRank[playerCardsRank.length - 1] - playerCardsRank[0] === 4 &&
+    playerCardsRank[3] - playerCardsRank[2] === 1
+  ) {
     console.log("straight");
+    output("You got a straight!");
+    result = "yes";
+  }
+  if (
+    playerCardsRank[playerCardsRank.length - 1] === 13 &&
+    playerCardsRank[1] === 10 &&
+    hasAce === "yes"
+  ) {
+    console.log("ace straight");
+    output("You got an ace straight");
+    result = "yes";
   }
 
   //Three of a kind win conditions
@@ -185,6 +234,8 @@ const calPlayerScore = () => {
     if (cardNameTally[cardName] === 3) {
       console.log("three of a kind");
       fullHouse = "half";
+      output("You got three of a kind");
+      result = "yes";
     }
   }
 
@@ -192,6 +243,8 @@ const calPlayerScore = () => {
   for (cardName in cardNameTally) {
     if (fullHouse === "half" && cardNameTally[cardName] === 2) {
       console.log("full house");
+      output("You got a full house");
+      result = "yes";
     }
   }
 
@@ -204,11 +257,19 @@ const calPlayerScore = () => {
   }
   if (twoPair === 2) {
     console.log("two pair");
+    output("You got two pairs");
+    result = "yes";
   }
 
   //One pair win condition
   if (twoPair === 1) {
     console.log("one pair");
+    output("You got a pair!");
+    result = "yes";
+  }
+
+  if (result === "") {
+    output("Sorry you didnt win anything");
   }
 
   // for (let i = 0; i < player1Cards.length; i++) {
@@ -216,6 +277,8 @@ const calPlayerScore = () => {
   // }
   // console.log(player1Score);
 };
+
+// calPlayerScore();
 
 let playerCardsElements = [];
 let playerCardsElementsHold = [];
@@ -273,57 +336,37 @@ player1ButtonClick = () => {
   }
 };
 
-// const holdCard = (i) => {
-//   console.log(player1Cards[i]);
-//   playerDiscardedCards.push(player1Cards[i]);
-//   playerDiscardedCardsIndex.push(i);
-//   createCard(player1Cards[i]);
-//   console.log(player1Cards);
-//   console.log(playerDiscardedCards);
-//   player1Cards[i] = "";
-//   for (let i = 0; i < player1Cards.length; i++) {
-//     if (player1Cards[i] === "") {
-//       player1Card = deck.pop();
-//       player1Cards[i] = player1Card;
-
-//       cardElement = createCard(player1Card);
-//       // Append the card element to the card container
-//       cardContainer.appendChild(cardElement);
-//     }
-//   }
-//   calPlayerScore();
-
-// gameState = "discarding cards";
-// };
-
 const initGame = () => {
-  const player1Button = document.createElement("button");
-  player1Button.classList.add("button");
-  player1Button.innerText = "Deal";
   document.body.appendChild(player1Button);
 
   player1Button.addEventListener("click", player1ButtonClick);
 
   // Create game info div as global value
   // fill game info div with starting instructions
-  const gameInfo = document.createElement("div");
-  gameInfo.innerText = "Click draw to draw 5 cards";
+
   document.body.appendChild(gameInfo);
 
-  cardContainer = document.createElement("div");
-  cardContainer.classList.add("card-container");
   document.body.appendChild(cardContainer);
 };
 
 initGame();
 
 //Reset game
-// const resetButton = document.createElement("button");
-// resetButton.classList.add("button");
-// resetButton.innerText = "Reset";
-// document.body.appendChild(resetButton);
-// resetButton.addEventListener("click", () => {
-//   cardContainer.innerHTML = "";
-//   deck = shuffleCards(makeDeck());
-//   initGame();
-// });
+const resetButton = document.createElement("button");
+resetButton.classList.add("button");
+resetButton.innerText = "Reset";
+document.body.appendChild(resetButton);
+resetButton.addEventListener("click", () => {
+  cardContainer.innerHTML = "";
+  deck = shuffleCards(makeDeck());
+  cardNameTally = {};
+  cardSuitTally = {};
+  playerCardsRank = [];
+  hasAce = "no";
+  playerCardsElements = [];
+  playerCardsElementsHold = [];
+  gameState = "dealing cards";
+  player1Cards = [];
+  playerDiscardedCards = [];
+  output("Click draw to try again");
+});
