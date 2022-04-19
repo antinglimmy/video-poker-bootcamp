@@ -1,12 +1,9 @@
 //To-do
-//- refactor code
-//Add JSDoc
 //order of cards when discarded
-/**
- * A function that sums numbers
- * @param  player1ButtonClick {function} Draws a card, displays it and calculates the total score
- * @return {number}
- */
+//winning conditions double check
+//make page responsive
+//fix position of game info
+//Change game info
 
 /**
  * Get a random index ranging from 0 (inclusive) to max (exclusive).
@@ -274,54 +271,43 @@ const calPlayerScore = () => {
   }
 
   if (result === "") {
-    output("Sorry you didnt win anything");
+    output("Sorry you didn't win anything");
   }
 
   // for (let i = 0; i < player1Cards.length; i++) {
   //   player1Score += player1Cards[i].rank;
   // }
-  // console.log(player1Score);
 };
 
 // calPlayerScore();
 
-let playerCardsElements = [];
-let playerCardsElementsHold = [];
-let gameState = "dealing cards";
-let cardElement;
-let player1CardNew;
+/**
+ * Helps to deal the first 5 cards, display the Discard message when cards are clicked, and replaces them with new cards from the deck
+ */
 player1ButtonClick = () => {
   if (gameState === "dealing cards") {
     for (let i = 0; i < 5; i++) {
       player1Card = deck.pop();
       player1Cards.push(player1Card);
-
       playerCardsElements[i] = createCard(player1Card);
-
-      // Append the card element to the card container
       cardContainer.appendChild(playerCardsElements[i]);
+      output("Choose the cards you want to discard");
     }
     gameState = "choosing cards to discard";
   }
   if (gameState === "choosing cards to discard") {
     for (let i = 0; i < 5; i++) {
       playerCardsElements[i].addEventListener("click", () => {
-        // playerCardsElementsHold[i] = playerCardsElements[i];
         playerDiscardedCards.push(playerCardsElements[i]);
-        // playerDiscardedCardsIndex.push(i);
-        // createCard(player1Cards[i]);
         console.log("player 1 cards =>", player1Cards);
         console.log("player discarded cards=>", playerDiscardedCards);
         player1Cards[i] = "";
-        playerCardsElements[i].classList.toggle("flipcard");
+        playerCardsElements[i].classList.add("flipcard");
         playerCardsElements[i].innerText = "Discard";
       });
     }
     gameState = "replacing cards";
   } else if (gameState === "replacing cards") {
-    // for (let i = 0; i < 5; i++) {
-    //   playerCardsElements[i].addEventListener("click", () => {
-
     for (let i = 0; i < playerCardsElements.length; i++) {
       if (playerCardsElements[i].innerText === "Discard") {
         playerCardsElements[i].remove();
@@ -341,14 +327,15 @@ player1ButtonClick = () => {
   }
 };
 
+/**
+ * Displays the initial game elements (game info, buttons, title) once page is loaded
+ */
 const initGame = () => {
   gameInfoContainer.appendChild(gameInfo);
   gameButtons.appendChild(player1Button);
+  gameButtons.appendChild(resetButton);
 
   player1Button.addEventListener("click", player1ButtonClick);
-
-  // Create game info div as global value
-  // fill game info div with starting instructions
 
   gameFooter.appendChild(gameInfoContainer);
   gameFooter.appendChild(gameButtons);
@@ -362,10 +349,10 @@ const initGame = () => {
 initGame();
 
 //Reset game
-const resetButton = document.createElement("button");
-resetButton.classList.add("resetButton");
-resetButton.innerText = "Reset";
-gameButtons.appendChild(resetButton);
+
+/**
+ * Once the reset button is clicked, the deck is repopulated and existing cards are removed from screen
+ */
 resetButton.addEventListener("click", () => {
   cardContainer.innerHTML = "";
   deck = shuffleCards(makeDeck());

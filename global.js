@@ -11,6 +11,12 @@ let playerCardsRank = [];
 let hasAce = "no";
 let result = "";
 
+let playerCardsElements = [];
+let playerCardsElementsHold = [];
+let gameState = "dealing cards";
+let cardElement;
+let player1CardNew;
+
 //Create all the game elemenets
 const gameHeader = document.createElement("div");
 gameHeader.classList.add("gameHeader");
@@ -22,7 +28,7 @@ const gameButtons = document.createElement("div");
 gameButtons.classList.add("gameButtons");
 
 const gameInfo = document.createElement("div");
-gameInfo.innerText = "Click draw";
+gameInfo.innerText = "Click draw to start";
 gameInfo.classList.add("gameInfo");
 
 const gameInfoContainer = document.createElement("div");
@@ -33,6 +39,10 @@ player1Button.innerText = "Deal";
 
 let cardContainer = document.createElement("div");
 cardContainer.classList.add("card-container");
+
+const resetButton = document.createElement("button");
+resetButton.classList.add("resetButton");
+resetButton.innerText = "Reset";
 
 //Test hands
 
