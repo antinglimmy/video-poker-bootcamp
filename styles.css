@@ -1,0 +1,142 @@
+body {
+  /* background-color: white; */
+  background-image: url("https://img.freepik.com/free-vector/abstract-background_52683-3700.jpg?t=st=1650297895~exp=1650298495~hmac=f501e06fbe5130d37d9ba99b435b37e7f3f0abde80382d17e8244a2e2948eedb&w=1800");
+}
+
+h1 {
+  text-align: center;
+  font-family: Rubik;
+  color: white;
+  font-size: 40px;
+  height: 100px;
+}
+
+#header {
+  line-height: 300px;
+}
+
+.gameHeader {
+  height: 60px;
+}
+
+.card {
+  margin: 10px 22px 0px 22px;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: white;
+  width: 100px;
+  height: 130px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.suit {
+  margin: 3px;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.name {
+  margin: 3px;
+  font-size: 40px;
+  font-weight: bold;
+  font-family: Rubik;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.red {
+  color: red;
+}
+
+.flipcard {
+  background-color: white;
+  color: black;
+  width: 100px;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  font-family: Rubik;
+  font-size: 25px;
+  font-weight: bolder;
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  padding: 3%;
+  width: 60%;
+  margin: 0 auto;
+  align-content: space-around;
+}
+
+.dealButton {
+  margin: 10px;
+  color: black;
+  border-radius: 25px;
+  padding: 10px;
+  width: 130px;
+  display: flex;
+  justify-content: center;
+  border: none;
+  font-size: 30px;
+  font-family: Rubik;
+}
+
+.resetButton {
+  margin: 10px;
+  color: black;
+  border-radius: 25px;
+  padding: 10px;
+  width: 130px;
+  display: flex;
+  justify-content: center;
+  border: none;
+  font-size: 30px;
+  font-family: Rubik;
+  /* position: relative;
+  left: 200px; */
+}
+.gameFooter {
+  display: flex;
+  background-color: rgba(50, 24, 139, 0.549);
+  width: 60%;
+  margin: 0 auto;
+  border-radius: 15px;
+  position: relative;
+  top: 30px;
+}
+
+.gameInfo {
+  color: white;
+  border-radius: 10px;
+  display: flex;
+  margin: 10px;
+  padding: 10px;
+  font-family: Rubik;
+  font-size: 30px;
+}
+
+.gameInfoContainer {
+  display: flex;
+  /* justify-content: flex-end; */
+  margin-right: auto;
+}
+
+.gameButtons {
+  display: flex;
+  flex-direction: row;
+  /* padding: 3%; */
+  /* justify-content: flex-start; */
+  margin-left: auto;
+}
+
+.game button:hover {
+  background-color: rgb(180, 180, 180);
+  color: black;
+}

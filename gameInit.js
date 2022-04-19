@@ -8,18 +8,18 @@
  * @return {number}
  */
 
-const gameInfo = document.createElement("div");
-gameInfo.innerText = "Click draw";
-player1Button = document.createElement("button");
-player1Button.classList.add("button");
-player1Button.innerText = "Deal";
-cardContainer = document.createElement("div");
-cardContainer.classList.add("card-container");
-
-// Get a random index ranging from 0 (inclusive) to max (exclusive).
+/**
+ * Get a random index ranging from 0 (inclusive) to max (exclusive).
+ * @param  max maximum number
+ * @return a number between 0 and parameter max
+ */
 const getRandomIndex = (max) => Math.floor(Math.random() * max);
 
-// Shuffle an array of cards
+/**
+ * Shuffle an array of cards
+ * @param  cards which are in an array of objects
+ * @return a shuffled deck
+ */
 const shuffleCards = (cards) => {
   // Loop over the card deck array once
   for (let currentIndex = 0; currentIndex < cards.length; currentIndex += 1) {
@@ -37,6 +37,10 @@ const shuffleCards = (cards) => {
   return cards;
 };
 
+/**
+ * Create a deck of 53 cards (including a Joker card)
+ * @return deck
+ */
 const makeDeck = () => {
   // Initialise an empty deck array
   const newDeck = [];
@@ -57,13 +61,13 @@ const makeDeck = () => {
 
       // If rank is 1, 11, 12, or 13, set cardName to the ace or face card's name
       if (cardName === "1") {
-        cardName = "ace";
+        cardName = "A";
       } else if (cardName === "11") {
-        cardName = "jack";
+        cardName = "J";
       } else if (cardName === "12") {
-        cardName = "queen";
+        cardName = "Q";
       } else if (cardName === "13") {
-        cardName = "king";
+        cardName = "K";
       }
 
       // Create a new card with the current name, suit, and rank
@@ -78,8 +82,8 @@ const makeDeck = () => {
     }
   }
   const wildCard = {
-    name: "joker",
-    suit: "joker",
+    name: "Joker",
+    suit: "",
     rank: 15,
   };
 
@@ -92,6 +96,11 @@ const makeDeck = () => {
 
 let deck = shuffleCards(makeDeck());
 
+/**
+ * Create a div element template for each card, with it's respective name and suit
+ * * @param cardInfo a card object with a name, suit and ranking
+ * @return created card div element with suit and name
+ */
 const createCard = (cardInfo) => {
   const suit = document.createElement("div");
   suit.classList.add("suit");
@@ -110,36 +119,32 @@ const createCard = (cardInfo) => {
   return card;
 };
 
-// Create a helper function for output to abstract complexity of DOM manipulation away from game logic
+/**
+ * The helper function to output the game info
+ * * @param message game info/result that you want to output
+ */
 const output = (message) => {
   gameInfo.innerText = message;
 };
 
-let cardNameTally = {};
-let cardSuitTally = {};
-let playerCardsRank = [];
-let hasAce = "no";
-let result = "";
+/**
+ * Helps to tally the cards, identify the winning condition and output the relevant result/message
+ */
 const calPlayerScore = () => {
   player1Score = 0;
 
-  // Loop over hand
   for (let i = 0; i < player1Cards.length; i += 1) {
     let cardName = player1Cards[i].name;
     let cardSuit = player1Cards[i].suit;
-    // If we have seen the card name before, increment its count
+
     if (cardName in cardNameTally) {
       cardNameTally[cardName] += 1;
-    }
-    // Else, initialise count of this card name to 1
-    else {
+    } else {
       cardNameTally[cardName] = 1;
     }
     if (cardSuit in cardSuitTally) {
       cardSuitTally[cardSuit] += 1;
-    }
-    // Else, initialise count of this card name to 1
-    else {
+    } else {
       cardSuitTally[cardSuit] = 1;
     }
 
@@ -337,25 +342,30 @@ player1ButtonClick = () => {
 };
 
 const initGame = () => {
-  document.body.appendChild(player1Button);
+  gameInfoContainer.appendChild(gameInfo);
+  gameButtons.appendChild(player1Button);
 
   player1Button.addEventListener("click", player1ButtonClick);
 
   // Create game info div as global value
   // fill game info div with starting instructions
 
-  document.body.appendChild(gameInfo);
+  gameFooter.appendChild(gameInfoContainer);
+  gameFooter.appendChild(gameButtons);
 
+  document.body.appendChild(gameHeader);
   document.body.appendChild(cardContainer);
+  document.body.appendChild(gameFooter);
+  // document.body.appendChild(gameButtons);
 };
 
 initGame();
 
 //Reset game
 const resetButton = document.createElement("button");
-resetButton.classList.add("button");
+resetButton.classList.add("resetButton");
 resetButton.innerText = "Reset";
-document.body.appendChild(resetButton);
+gameButtons.appendChild(resetButton);
 resetButton.addEventListener("click", () => {
   cardContainer.innerHTML = "";
   deck = shuffleCards(makeDeck());
