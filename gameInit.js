@@ -4,6 +4,7 @@
 //make page responsive
 //fix position of game info
 //Change game info
+//When press discard, can un-discard it
 
 /**
  * Get a random index ranging from 0 (inclusive) to max (exclusive).
@@ -281,45 +282,62 @@ const calPlayerScore = () => {
 
 // calPlayerScore();
 
+//Display cards in card container
+let playerCardElements2 = [];
+const displayCards = () => {
+  cardContainer.innerHTML = "";
+  for (let i = 0; i < playerCardsElements.length; i++) {
+    playerCardElements2[i] = createCard(playerCardsElements[i]);
+    cardContainer.appendChild(playerCardElements2[i]);
+    console.log("I happen");
+  }
+};
+
 /**
  * Helps to deal the first 5 cards, display the Discard message when cards are clicked, and replaces them with new cards from the deck
  */
+let flipCards;
 player1ButtonClick = () => {
   if (gameState === "dealing cards") {
     for (let i = 0; i < 5; i++) {
       player1Card = deck.pop();
       player1Cards.push(player1Card);
-      playerCardsElements[i] = createCard(player1Card);
-      cardContainer.appendChild(playerCardsElements[i]);
-      output("Choose the cards you want to discard");
+      playerCardsElements[i] = player1Card;
+      // player1Cards.push(player1Card);
+      // playerCardsElements[i] = createCard(player1Card);
+      // cardContainer.appendChild(playerCardsElements[i]);
     }
+    output("Choose the cards you want to discard");
+    displayCards();
     gameState = "choosing cards to discard";
   }
   if (gameState === "choosing cards to discard") {
     for (let i = 0; i < 5; i++) {
-      playerCardsElements[i].addEventListener("click", () => {
+      playerCardElements2[i].addEventListener("click", () => {
         playerDiscardedCards.push(playerCardsElements[i]);
-        console.log("player 1 cards =>", player1Cards);
-        console.log("player discarded cards=>", playerDiscardedCards);
+        // console.log("player 1 cards =>", player1Cards);
+        // console.log("player discarded cards=>", playerDiscardedCards);
         player1Cards[i] = "";
-        playerCardsElements[i].classList.add("flipcard");
-        playerCardsElements[i].innerText = "Discard";
+        playerCardElements2[i].innerText = "Discard";
+        playerCardElements2[i].classList.toggle("flipcard");
       });
     }
     gameState = "replacing cards";
   } else if (gameState === "replacing cards") {
     for (let i = 0; i < playerCardsElements.length; i++) {
-      if (playerCardsElements[i].innerText === "Discard") {
-        playerCardsElements[i].remove();
+      if (playerCardElements2[i].innerText === "Discard") {
+        // cardContainer.appendChild(playerCardsElements[i]);
+        // playerCardElements2[i].remove();
         player1CardNew = deck.pop();
-        player1Cards[i] = player1CardNew;
+        // player1Cards[i] = player1CardNew;
         console.log(player1CardNew);
 
-        playerCardsElements[i] = createCard(player1CardNew);
+        playerCardsElements[i] = player1CardNew;
         console.log(playerCardsElements[i]);
-        cardContainer.appendChild(playerCardsElements[i]);
+        // cardContainer.appendChild(playerCardsElements[i]);
       }
     }
+    displayCards();
     gameState = "after deal";
 
     calPlayerScore();
@@ -341,6 +359,7 @@ const initGame = () => {
   gameFooter.appendChild(gameButtons);
 
   document.body.appendChild(gameHeader);
+
   document.body.appendChild(cardContainer);
   document.body.appendChild(gameFooter);
   // document.body.appendChild(gameButtons);
