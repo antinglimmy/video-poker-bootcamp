@@ -1,49 +1,21 @@
 //Global variables
-let player1Cards = [];
-// let player1Card;
-let player1Score = 0;
+let playerCard;
 let playerDiscardedCards = [];
 let playerDiscardedCardsIndex = [];
-
 let cardNameTally = {};
 let cardSuitTally = {};
 let playerCardsRank = [];
 let hasAce = "no";
 let result = "";
-
+let flipCards;
+let playerCardElements = [];
 let playerCardObjects = [];
 let playerCardsElementsHold = [];
 let gameState = "dealing cards";
 let cardElement;
-let player1CardNew;
+let playerCardNew;
 
 //Create all the game elemenets
-const gameHeader = document.createElement("div");
-gameHeader.classList.add("gameHeader");
-
-const gameFooter = document.createElement("div");
-gameFooter.classList.add("gameFooter");
-
-const gameButtons = document.createElement("div");
-gameButtons.classList.add("gameButtons");
-
-const gameResult = document.createElement("div");
-gameResult.innerText = "Click draw to start";
-gameResult.classList.add("gameResult");
-
-const gameInfoContainer = document.createElement("div");
-
-let player1Button = document.createElement("button");
-player1Button.classList.add("dealButton");
-player1Button.innerText = "Deal";
-
-let cardContainer = document.createElement("div");
-cardContainer.classList.add("card-container");
-
-const resetButton = document.createElement("button");
-resetButton.classList.add("resetButton");
-resetButton.innerText = "Reset";
-
 const topContainer = document.createElement("div");
 topContainer.classList.add("topContainer");
 
@@ -53,7 +25,32 @@ gameInfo.innerText = "i";
 
 const gameInfoText = document.createElement("span");
 gameInfoText.classList.add("gameInfoText");
-gameInfoText.innerText = "lorem ipsum";
+gameInfoText.innerHTML =
+  "Click on Draw to start the game and Reset to get a new hand. <br> The usual Poker rules don't really apply but have fun!";
+
+const gameHeader = document.createElement("div");
+gameHeader.classList.add("gameHeader");
+
+let cardContainer = document.createElement("div");
+cardContainer.classList.add("card-container");
+
+const gameFooter = document.createElement("div");
+gameFooter.classList.add("gameFooter");
+
+let dealButton = document.createElement("button");
+dealButton.classList.add("dealButton");
+dealButton.innerText = "Deal";
+
+const resetButton = document.createElement("button");
+resetButton.classList.add("resetButton");
+resetButton.innerText = "Reset";
+
+const gameButtons = document.createElement("div");
+gameButtons.classList.add("gameButtons");
+
+const gameResult = document.createElement("div");
+gameResult.innerText = "Click draw to start";
+gameResult.classList.add("gameResult");
 
 //Test hands
 

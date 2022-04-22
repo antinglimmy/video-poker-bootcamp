@@ -2,14 +2,14 @@
 //[DONE] order of cards when discarded
 //winning conditions double check
 //make page responsive
-//When press discard, can un-discard it multiple times
 //Joker image
-//Change variable names
+//[DONE]Change variable names
 //Push
-//Jsdoc formatting
-// Have your functions and variables clearly named
-// Don’t add comments to code that are self explanatory
+//[DONE] Jsdoc formatting
+//[DONE]Have your functions and variables clearly named
+// [DONE] Don’t add comments to code that are self explanatory
 //After discarding once and displaying result once, how to continue with current set
+//Only replacing 1 card
 
 const getRandomIndex = (max) => Math.floor(Math.random() * max);
 
@@ -115,8 +115,7 @@ const output = (message) => {
 /**
  * Helps to tally the cards, identify the winning condition and output the relevant result/message
  */
-const calPlayerScore = () => {
-  player1Score = 0;
+const calPlayerResult = () => {
   cardNameTally = {};
   cardSuitTally = {};
   playerCardsRank = [];
@@ -266,33 +265,29 @@ const calPlayerScore = () => {
   if (result === "") {
     output("Sorry you didn't win anything");
   }
-
-  // for (let i = 0; i < player1Cards.length; i++) {
-  //   player1Score += player1Cards[i].rank;
-  // }
 };
 
+/**
+ * Helper function to discard the "discard" message when card is clicked, replaces the card and displays the new card
+ * * @param i current card being clicked
+ */
 const discardCards = (i) => {
-  // if (gameState === "choosing cards to discard") {
   playerDiscardedCards.push(playerCardObjects[i]);
   if (playerCardElements[i].innerText === "Discard") {
-    player1CardNew = deck.pop();
-    playerCardObjects[i] = player1CardNew;
+    playerCardNew = deck.pop();
+    playerCardObjects[i] = playerCardNew;
     playerCardElements[i] = createCard(playerCardObjects[i]);
-    console.log("I happen");
     displayCards();
   } else {
     playerCardElements[i].innerText = "Discard";
     playerCardElements[i].classList.toggle("flipcard");
-    console.log("I happen 2");
     console.log(playerCardElements[i].innerText);
-    // displayCards();
   }
-  console.log("I happen 3");
 };
 
-//Display cards in card container
-let playerCardElements = [];
+/**
+ * Helper function to display the current player hand in cardContainer within the page and enables the clicking of cards to discard them via the discardCard function
+ */
 const displayCards = () => {
   cardContainer.innerHTML = "";
   for (let i = 0; i < playerCardObjects.length; i++) {
@@ -302,65 +297,62 @@ const displayCards = () => {
   }
 };
 
+/**
+ * Helper function to display the initial hand of 5 cards on the page
+ */
 const dealCards = () => {
   for (let i = 0; i < 5; i++) {
-    player1Card = deck.pop();
-    playerCardObjects[i] = player1Card;
+    playerCard = deck.pop();
+    playerCardObjects[i] = playerCard;
   }
   output("Choose the cards you want to discard");
   displayCards();
 };
 
 /**
- * Helps to deal the first 5 cards, display the Discard message when cards are clicked, and replaces them with new cards from the deck
+ * Main function run when Deal button is clicked, enabling the display of the initial hand, discarding and replacement of cards and display of final result
  */
-let flipCards;
-player1ButtonClick = () => {
+
+playerDealButtonClick = () => {
   if (gameState === "dealing cards") {
     dealCards();
     gameState = "replacing cards";
   } else if (gameState === "replacing cards") {
-    //   //   for (let i = 0; i < playerCardObjects.length; i++) {
-    //   //     if (playerCardElements[i].innerText === "Discard") {
-    //   //       player1CardNew = deck.pop();
-    //   //       playerCardObjects[i] = player1CardNew;
-    //   //     }
-    //   //   }
-    displayCards();
-    //   gameState = "after deal";
-
-    calPlayerScore();
+    for (let i = 0; i < playerCardObjects.length; i++) {
+      if (playerCardElements[i].innerText === "Discard") {
+        playerCardNew = deck.pop();
+        playerCardObjects[i] = playerCardNew;
+        playerCardElements[i] = createCard(playerCardObjects[i]);
+        calPlayerResult();
+        displayCards();
+      }
+    }
   }
 };
-/**
- * Displays the initial game elements (game info, buttons, title) once page is loaded
- */
+
 const initGame = () => {
-  gameInfoContainer.appendChild(gameResult);
-  gameButtons.appendChild(player1Button);
+  gameButtons.appendChild(dealButton);
   gameButtons.appendChild(resetButton);
 
-  player1Button.addEventListener("click", player1ButtonClick);
+  dealButton.addEventListener("click", playerDealButtonClick);
 
-  gameFooter.appendChild(gameInfoContainer);
+  gameFooter.appendChild(gameResult);
   gameFooter.appendChild(gameButtons);
 
-  document.body.appendChild(topContainer);
+  gameInfo.appendChild(gameInfoText);
+
   topContainer.appendChild(gameInfo);
+  document.body.appendChild(topContainer);
   document.body.appendChild(gameHeader);
 
   document.body.appendChild(cardContainer);
   document.body.appendChild(gameFooter);
-
-  // document.body.appendChild(gameButtons);
 };
 
 initGame();
 
-//Reset game
-
 /**
- * Once the reset button is clicked, the deck is repopulated and existing cards are removed from screen
+ * When the reset button is clicked, the deck is repopulated and existing cards are removed from screen
  */
 resetButton.addEventListener("click", () => {
   cardContainer.innerHTML = "";
@@ -373,7 +365,6 @@ resetButton.addEventListener("click", () => {
   playerCardsElementsHold = [];
   gameState = "dealing cards";
   result = "";
-  // player1Cards = [];
   playerDiscardedCards = [];
   output("Click draw to try again");
 });

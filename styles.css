@@ -27,8 +27,8 @@ h1 {
   border: solid 1px lightgray;
   background-color: rgba(50, 24, 139, 0.549);
   color: white;
-  font-size: 20px;
-  font-family: Rubik;
+  font-size: 25px;
+  font-family: Helvetica;
   text-align: center;
   display: flex;
   justify-content: center;
@@ -38,29 +38,34 @@ h1 {
   position: fixed;
   top: 10px;
   right: 10px;
+  padding: 10px;
 }
 
 .gameInfo .gameInfoText {
   visibility: hidden;
   width: 120px;
-  background-color: black;
+  background-color: rgba(50, 24, 139, 0.549);
   color: #fff;
+  font-size: 20px;
+  font-family: Rubik;
   text-align: center;
   padding: 5px 0;
   border-radius: 6px;
-  width: 120px;
-  top: 100%;
-  left: 50%;
-  margin-left: -60px;
-
-  /* Position the tooltip text - see examples below!
-  position: absolute;
-  z-index: 1; */
+  width: 250px;
+  position: fixed;
+  top: 50px;
+  right: 10px;
+  opacity: 0;
+  transition: opacity 0.5s;
+  display: flex;
+  align-items: center;
+  padding: 10px;
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */
 .gameInfo:hover .gameInfoText {
   visibility: visible;
+  opacity: 1;
 }
 
 .gameHeader {
@@ -177,12 +182,6 @@ h1 {
   padding: 10px;
   font-family: Rubik;
   font-size: 30px;
-}
-
-.gameInfoContainer {
-  display: flex;
-  /* justify-content: flex-end; */
-  margin-right: auto;
 }
 
 .gameButtons {
