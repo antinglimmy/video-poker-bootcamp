@@ -6,19 +6,13 @@
 //Joker image
 //Change variable names
 //Push
+//Jsdoc formatting
+// Have your functions and variables clearly named
+// Don’t add comments to code that are self explanatory
+//After discarding once and displaying result once, how to continue with current set
 
-/**
- * Get a random index ranging from 0 (inclusive) to max (exclusive).
- * @param  max maximum number
- * @return a number between 0 and parameter max
- */
 const getRandomIndex = (max) => Math.floor(Math.random() * max);
 
-/**
- * Shuffle an array of cards
- * @param  cards which are in an array of objects
- * @return a shuffled deck
- */
 const shuffleCards = (cards) => {
   // Loop over the card deck array once
   for (let currentIndex = 0; currentIndex < cards.length; currentIndex += 1) {
@@ -36,10 +30,6 @@ const shuffleCards = (cards) => {
   return cards;
 };
 
-/**
- * Create a deck of 53 cards (including a Joker card)
- * @return deck
- */
 const makeDeck = () => {
   // Initialise an empty deck array
   const newDeck = [];
@@ -118,10 +108,6 @@ const createCard = (cardInfo) => {
   return card;
 };
 
-/**
- * The helper function to output the game info
- * * @param message game info/result that you want to output
- */
 const output = (message) => {
   gameResult.innerText = message;
 };
@@ -131,6 +117,11 @@ const output = (message) => {
  */
 const calPlayerScore = () => {
   player1Score = 0;
+  cardNameTally = {};
+  cardSuitTally = {};
+  playerCardsRank = [];
+  hasAce = "no";
+  result = "";
 
   for (let i = 0; i < playerCardObjects.length; i += 1) {
     let cardName = playerCardObjects[i].name;
@@ -281,20 +272,23 @@ const calPlayerScore = () => {
   // }
 };
 
-calPlayerScore();
-
 const discardCards = (i) => {
   // if (gameState === "choosing cards to discard") {
   playerDiscardedCards.push(playerCardObjects[i]);
   if (playerCardElements[i].innerText === "Discard") {
+    player1CardNew = deck.pop();
+    playerCardObjects[i] = player1CardNew;
     playerCardElements[i] = createCard(playerCardObjects[i]);
-    displayCards();
     console.log("I happen");
+    displayCards();
   } else {
     playerCardElements[i].innerText = "Discard";
     playerCardElements[i].classList.toggle("flipcard");
     console.log("I happen 2");
+    console.log(playerCardElements[i].innerText);
+    // displayCards();
   }
+  console.log("I happen 3");
 };
 
 //Display cards in card container
@@ -311,7 +305,6 @@ const displayCards = () => {
 const dealCards = () => {
   for (let i = 0; i < 5; i++) {
     player1Card = deck.pop();
-    // player1Cards.push(player1Card);
     playerCardObjects[i] = player1Card;
   }
   output("Choose the cards you want to discard");
@@ -325,29 +318,18 @@ let flipCards;
 player1ButtonClick = () => {
   if (gameState === "dealing cards") {
     dealCards();
-    // gameState = "choosing cards to discard";
-
-    discardCards();
     gameState = "replacing cards";
   } else if (gameState === "replacing cards") {
-    for (let i = 0; i < playerCardObjects.length; i++) {
-      if (playerCardElements[i].innerText === "Discard") {
-        // cardContainer.appendChild(playerCardObjects[i]);
-        // playerCardElements[i].remove();
-        player1CardNew = deck.pop();
-        // player1Cards[i] = player1CardNew;
-        console.log(player1CardNew);
-
-        playerCardObjects[i] = player1CardNew;
-        console.log(playerCardObjects[i]);
-        // cardContainer.appendChild(playerCardObjects[i]);
-      }
-    }
+    //   //   for (let i = 0; i < playerCardObjects.length; i++) {
+    //   //     if (playerCardElements[i].innerText === "Discard") {
+    //   //       player1CardNew = deck.pop();
+    //   //       playerCardObjects[i] = player1CardNew;
+    //   //     }
+    //   //   }
     displayCards();
-    gameState = "after deal";
+    //   gameState = "after deal";
 
     calPlayerScore();
-    console.log("player score", player1Score);
   }
 };
 /**
