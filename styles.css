@@ -15,17 +15,68 @@ h1 {
   line-height: 300px;
 }
 
+.topContainer {
+  height: 30px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.gameInfo {
+  border-radius: 50%;
+  border: solid 1px lightgray;
+  background-color: rgba(50, 24, 139, 0.549);
+  color: white;
+  font-size: 20px;
+  font-family: Rubik;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+}
+
+.gameInfo .gameInfoText {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  width: 120px;
+  top: 100%;
+  left: 50%;
+  margin-left: -60px;
+
+  /* Position the tooltip text - see examples below!
+  position: absolute;
+  z-index: 1; */
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.gameInfo:hover .gameInfoText {
+  visibility: visible;
+}
+
 .gameHeader {
   height: 60px;
 }
 
+#joker {
+  background-image: url("Joker-Movie-PNG.png");
+}
 .card {
   margin: 10px 22px 0px 22px;
   padding: 10px;
   border-radius: 8px;
   background-color: white;
-  width: 100px;
-  height: 130px;
+  width: 120px;
+  height: 150px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -34,7 +85,7 @@ h1 {
 
 .suit {
   margin: 3px;
-  font-size: 30px;
+  font-size: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -57,12 +108,12 @@ h1 {
 .flipcard {
   background-color: white;
   color: black;
-  width: 100px;
-  height: 130px;
+  width: 120px;
+  height: 150px;
   display: flex;
   align-items: center;
   font-family: Rubik;
-  font-size: 25px;
+  font-size: 30px;
   font-weight: bolder;
 }
 
@@ -81,8 +132,10 @@ h1 {
   border-radius: 25px;
   padding: 10px;
   width: 130px;
+  height: 70px;
   display: flex;
   justify-content: center;
+  align-items: center;
   border: none;
   font-size: 30px;
   font-family: Rubik;
@@ -94,14 +147,17 @@ h1 {
   border-radius: 25px;
   padding: 10px;
   width: 130px;
+  height: 70px;
   display: flex;
   justify-content: center;
+  align-items: center;
   border: none;
   font-size: 30px;
   font-family: Rubik;
   /* position: relative;
   left: 200px; */
 }
+
 .gameFooter {
   display: flex;
   background-color: rgba(50, 24, 139, 0.549);
@@ -110,9 +166,10 @@ h1 {
   border-radius: 15px;
   position: relative;
   top: 30px;
+  align-items: center;
 }
 
-.gameInfo {
+.gameResult {
   color: white;
   border-radius: 10px;
   display: flex;

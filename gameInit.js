@@ -1,10 +1,11 @@
 //To-do
-//order of cards when discarded
+//[DONE] order of cards when discarded
 //winning conditions double check
 //make page responsive
-//fix position of game info
-//Change game info
-//When press discard, can un-discard it
+//When press discard, can un-discard it multiple times
+//Joker image
+//Change variable names
+//Push
 
 /**
  * Get a random index ranging from 0 (inclusive) to max (exclusive).
@@ -122,7 +123,7 @@ const createCard = (cardInfo) => {
  * * @param message game info/result that you want to output
  */
 const output = (message) => {
-  gameInfo.innerText = message;
+  gameResult.innerText = message;
 };
 
 /**
@@ -131,9 +132,9 @@ const output = (message) => {
 const calPlayerScore = () => {
   player1Score = 0;
 
-  for (let i = 0; i < player1Cards.length; i += 1) {
-    let cardName = player1Cards[i].name;
-    let cardSuit = player1Cards[i].suit;
+  for (let i = 0; i < playerCardObjects.length; i += 1) {
+    let cardName = playerCardObjects[i].name;
+    let cardSuit = playerCardObjects[i].suit;
 
     if (cardName in cardNameTally) {
       cardNameTally[cardName] += 1;
@@ -152,8 +153,8 @@ const calPlayerScore = () => {
     }
   }
 
-  for (let i = 0; i < player1Cards.length; i += 1) {
-    playerCardsRank.push(player1Cards[i].rank);
+  for (let i = 0; i < playerCardObjects.length; i += 1) {
+    playerCardsRank.push(playerCardObjects[i].rank);
   }
   playerCardsRank.sort(function (a, b) {
     return a - b;
@@ -280,17 +281,41 @@ const calPlayerScore = () => {
   // }
 };
 
-// calPlayerScore();
+calPlayerScore();
+
+const discardCards = (i) => {
+  // if (gameState === "choosing cards to discard") {
+  playerDiscardedCards.push(playerCardObjects[i]);
+  if (playerCardElements[i].innerText === "Discard") {
+    playerCardElements[i] = createCard(playerCardObjects[i]);
+    displayCards();
+    console.log("I happen");
+  } else {
+    playerCardElements[i].innerText = "Discard";
+    playerCardElements[i].classList.toggle("flipcard");
+    console.log("I happen 2");
+  }
+};
 
 //Display cards in card container
-let playerCardElements2 = [];
+let playerCardElements = [];
 const displayCards = () => {
   cardContainer.innerHTML = "";
-  for (let i = 0; i < playerCardsElements.length; i++) {
-    playerCardElements2[i] = createCard(playerCardsElements[i]);
-    cardContainer.appendChild(playerCardElements2[i]);
-    console.log("I happen");
+  for (let i = 0; i < playerCardObjects.length; i++) {
+    playerCardElements[i] = createCard(playerCardObjects[i]);
+    cardContainer.appendChild(playerCardElements[i]);
+    playerCardElements[i].addEventListener("click", () => discardCards(i));
   }
+};
+
+const dealCards = () => {
+  for (let i = 0; i < 5; i++) {
+    player1Card = deck.pop();
+    // player1Cards.push(player1Card);
+    playerCardObjects[i] = player1Card;
+  }
+  output("Choose the cards you want to discard");
+  displayCards();
 };
 
 /**
@@ -299,42 +324,23 @@ const displayCards = () => {
 let flipCards;
 player1ButtonClick = () => {
   if (gameState === "dealing cards") {
-    for (let i = 0; i < 5; i++) {
-      player1Card = deck.pop();
-      player1Cards.push(player1Card);
-      playerCardsElements[i] = player1Card;
-      // player1Cards.push(player1Card);
-      // playerCardsElements[i] = createCard(player1Card);
-      // cardContainer.appendChild(playerCardsElements[i]);
-    }
-    output("Choose the cards you want to discard");
-    displayCards();
-    gameState = "choosing cards to discard";
-  }
-  if (gameState === "choosing cards to discard") {
-    for (let i = 0; i < 5; i++) {
-      playerCardElements2[i].addEventListener("click", () => {
-        playerDiscardedCards.push(playerCardsElements[i]);
-        // console.log("player 1 cards =>", player1Cards);
-        // console.log("player discarded cards=>", playerDiscardedCards);
-        player1Cards[i] = "";
-        playerCardElements2[i].innerText = "Discard";
-        playerCardElements2[i].classList.toggle("flipcard");
-      });
-    }
+    dealCards();
+    // gameState = "choosing cards to discard";
+
+    discardCards();
     gameState = "replacing cards";
   } else if (gameState === "replacing cards") {
-    for (let i = 0; i < playerCardsElements.length; i++) {
-      if (playerCardElements2[i].innerText === "Discard") {
-        // cardContainer.appendChild(playerCardsElements[i]);
-        // playerCardElements2[i].remove();
+    for (let i = 0; i < playerCardObjects.length; i++) {
+      if (playerCardElements[i].innerText === "Discard") {
+        // cardContainer.appendChild(playerCardObjects[i]);
+        // playerCardElements[i].remove();
         player1CardNew = deck.pop();
         // player1Cards[i] = player1CardNew;
         console.log(player1CardNew);
 
-        playerCardsElements[i] = player1CardNew;
-        console.log(playerCardsElements[i]);
-        // cardContainer.appendChild(playerCardsElements[i]);
+        playerCardObjects[i] = player1CardNew;
+        console.log(playerCardObjects[i]);
+        // cardContainer.appendChild(playerCardObjects[i]);
       }
     }
     displayCards();
@@ -344,12 +350,11 @@ player1ButtonClick = () => {
     console.log("player score", player1Score);
   }
 };
-
 /**
  * Displays the initial game elements (game info, buttons, title) once page is loaded
  */
 const initGame = () => {
-  gameInfoContainer.appendChild(gameInfo);
+  gameInfoContainer.appendChild(gameResult);
   gameButtons.appendChild(player1Button);
   gameButtons.appendChild(resetButton);
 
@@ -358,10 +363,13 @@ const initGame = () => {
   gameFooter.appendChild(gameInfoContainer);
   gameFooter.appendChild(gameButtons);
 
+  document.body.appendChild(topContainer);
+  topContainer.appendChild(gameInfo);
   document.body.appendChild(gameHeader);
 
   document.body.appendChild(cardContainer);
   document.body.appendChild(gameFooter);
+
   // document.body.appendChild(gameButtons);
 };
 
@@ -379,10 +387,11 @@ resetButton.addEventListener("click", () => {
   cardSuitTally = {};
   playerCardsRank = [];
   hasAce = "no";
-  playerCardsElements = [];
+  playerCardObjects = [];
   playerCardsElementsHold = [];
   gameState = "dealing cards";
-  player1Cards = [];
+  result = "";
+  // player1Cards = [];
   playerDiscardedCards = [];
   output("Click draw to try again");
 });

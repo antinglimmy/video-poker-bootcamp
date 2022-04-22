@@ -1,6 +1,6 @@
 //Global variables
 let player1Cards = [];
-let player1Card;
+// let player1Card;
 let player1Score = 0;
 let playerDiscardedCards = [];
 let playerDiscardedCardsIndex = [];
@@ -11,7 +11,7 @@ let playerCardsRank = [];
 let hasAce = "no";
 let result = "";
 
-let playerCardsElements = [];
+let playerCardObjects = [];
 let playerCardsElementsHold = [];
 let gameState = "dealing cards";
 let cardElement;
@@ -27,9 +27,9 @@ gameFooter.classList.add("gameFooter");
 const gameButtons = document.createElement("div");
 gameButtons.classList.add("gameButtons");
 
-const gameInfo = document.createElement("div");
-gameInfo.innerText = "Click draw to start";
-gameInfo.classList.add("gameInfo");
+const gameResult = document.createElement("div");
+gameResult.innerText = "Click draw to start";
+gameResult.classList.add("gameResult");
 
 const gameInfoContainer = document.createElement("div");
 
@@ -44,6 +44,17 @@ const resetButton = document.createElement("button");
 resetButton.classList.add("resetButton");
 resetButton.innerText = "Reset";
 
+const topContainer = document.createElement("div");
+topContainer.classList.add("topContainer");
+
+const gameInfo = document.createElement("div");
+gameInfo.classList.add("gameInfo");
+gameInfo.innerText = "i";
+
+const gameInfoText = document.createElement("span");
+gameInfoText.classList.add("gameInfoText");
+gameInfoText.innerText = "lorem ipsum";
+
 //Test hands
 
 // let playerTestHand5Kind = [
@@ -51,7 +62,11 @@ resetButton.innerText = "Reset";
 //   { rank: 3, suit: "⬥", name: "3" },
 //   { rank: 3, suit: "♣", name: "3" },
 //   { rank: 3, suit: "♠", name: "3" },
-//   { rank: 14, suit: "joker", name: "joker" },
+//   {
+//     rank: 14,
+//     suit: "",
+//     name: "joker",
+//   },
 // ];
 
 // let playerTestHandStraightFlush = [
