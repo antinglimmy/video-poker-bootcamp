@@ -1,3 +1,4 @@
+/* eslint-disable */
 //To-do
 //[DONE] order of cards when discarded
 //winning conditions double check
@@ -277,7 +278,7 @@ const discardCards = (i) => {
     playerCardNew = deck.pop();
     playerCardObjects[i] = playerCardNew;
     playerCardElements[i] = createCard(playerCardObjects[i]);
-    displayCards();
+    // displayCards();
   } else {
     playerCardElements[i].innerText = "Discard";
     playerCardElements[i].classList.toggle("flipcard");
@@ -293,7 +294,7 @@ const displayCards = () => {
   for (let i = 0; i < playerCardObjects.length; i++) {
     playerCardElements[i] = createCard(playerCardObjects[i]);
     cardContainer.appendChild(playerCardElements[i]);
-    playerCardElements[i].addEventListener("click", () => discardCards(i));
+    // playerCardElements[i].addEventListener("click", () => discardCards(i));
   }
 };
 
@@ -316,16 +317,22 @@ const dealCards = () => {
 playerDealButtonClick = () => {
   if (gameState === "dealing cards") {
     dealCards();
+    for (let i = 0; i < playerCardObjects.length; i++) {
+    playerCardElements[i].addEventListener("click", () => discardCards(i));
+  }
     gameState = "replacing cards";
   } else if (gameState === "replacing cards") {
+    console.log("i happen")
     for (let i = 0; i < playerCardObjects.length; i++) {
       if (playerCardElements[i].innerText === "Discard") {
         playerCardNew = deck.pop();
         playerCardObjects[i] = playerCardNew;
+        console.log(playerCardObjects[i])
         playerCardElements[i] = createCard(playerCardObjects[i]);
-        calPlayerResult();
-        displayCards();
+        console.log("test")
       }
+      displayCards();
+      calPlayerResult();
     }
   }
 };
@@ -368,3 +375,4 @@ resetButton.addEventListener("click", () => {
   playerDiscardedCards = [];
   output("Click draw to try again");
 });
+/* eslint-disable */
