@@ -273,17 +273,18 @@ const calPlayerResult = () => {
  * * @param i current card being clicked
  */
 const discardCards = (i) => {
-  playerDiscardedCards.push(playerCardObjects[i]);
-  if (playerCardElements[i].innerText === "Discard") {
-    playerCardNew = deck.pop();
-    playerCardObjects[i] = playerCardNew;
-    playerCardElements[i] = createCard(playerCardObjects[i]);
-    // displayCards();
-  } else {
+  // playerDiscardedCards.push(playerCardObjects[i]);
+  // for (let i = 0; i < playerCardObjects.length; i++) {
+  // if (playerCardElements[i].innerText === "Discard") {
+  //   playerCardNew = deck.pop();
+  //   playerCardObjects[i] = playerCardNew;
+  //   playerCardElements[i] = createCard(playerCardObjects[i]);
+  //   // displayCards();
+  // } else {
     playerCardElements[i].innerText = "Discard";
     playerCardElements[i].classList.toggle("flipcard");
     console.log(playerCardElements[i].innerText);
-  }
+
 };
 
 /**
@@ -294,7 +295,15 @@ const displayCards = () => {
   for (let i = 0; i < playerCardObjects.length; i++) {
     playerCardElements[i] = createCard(playerCardObjects[i]);
     cardContainer.appendChild(playerCardElements[i]);
-    // playerCardElements[i].addEventListener("click", () => discardCards(i));
+    playerCardElements[i].addEventListener("click", () => discardCards(i));
+  }
+};
+
+const displayCards2 = () => {
+  cardContainer.innerHTML = "";
+  for (let i = 0; i < playerCardObjects.length; i++) {
+    playerCardElements[i] = createCard(playerCardObjects[i]);
+    cardContainer.appendChild(playerCardElements[i]);
   }
 };
 
@@ -317,9 +326,6 @@ const dealCards = () => {
 playerDealButtonClick = () => {
   if (gameState === "dealing cards") {
     dealCards();
-    for (let i = 0; i < playerCardObjects.length; i++) {
-    playerCardElements[i].addEventListener("click", () => discardCards(i));
-  }
     gameState = "replacing cards";
   } else if (gameState === "replacing cards") {
     console.log("i happen")
@@ -330,8 +336,9 @@ playerDealButtonClick = () => {
         console.log(playerCardObjects[i])
         playerCardElements[i] = createCard(playerCardObjects[i]);
         console.log("test")
+        console.log("test 2")
       }
-      displayCards();
+      displayCards2();
       calPlayerResult();
     }
   }

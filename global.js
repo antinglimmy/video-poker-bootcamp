@@ -1,3 +1,4 @@
+/* eslint-disable */
 //Global variables
 let playerCard;
 let playerDiscardedCards = [];
@@ -129,3 +130,4 @@ gameResult.classList.add("gameResult");
 //   { rank: 3, suit: "⬥", name: "3" },
 //   { rank: 3, suit: "♥", name: "3" },
 // ];
+/* eslint-disable */
