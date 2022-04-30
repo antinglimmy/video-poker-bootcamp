@@ -152,7 +152,6 @@ const calPlayerResult = () => {
   let fiveKind = '';
   for (cardName in cardNameTally) {
     if (cardNameTally[cardName] === 4) {
-      console.log('four of a kind');
       fiveKind = 'half';
       output('You got four of a kind!');
       result = 'yes';
@@ -162,7 +161,6 @@ const calPlayerResult = () => {
   // Five of a kind win condition
   for (cardName in cardNameTally) {
     if (fiveKind === 'half' && cardName === 'joker') {
-      console.log('five of a kind');
       output('You got five of a kind!');
       result = 'yes';
     }
@@ -172,9 +170,7 @@ const calPlayerResult = () => {
   let straightFlush = '';
   for (cardSuit in cardSuitTally) {
     if (cardSuitTally[cardSuit] === 5) {
-      console.log('flush');
       straightFlush = 'half';
-      console.log(straightFlush);
       output('You got a flush');
       result = 'yes';
     }
@@ -184,7 +180,6 @@ const calPlayerResult = () => {
     straightFlush === 'half'
     && playerCardsRank[playerCardsRank.length - 1] - playerCardsRank[1] === 4
   ) {
-    console.log('straight flush');
     output('You got a straight flush');
     result = 'yes';
   }
@@ -195,7 +190,6 @@ const calPlayerResult = () => {
     && playerCardsRank[1] === 10
     && hasAce === 'yes'
   ) {
-    console.log('king high flush');
     output('You got a king high flush!');
     result = 'yes';
   }
@@ -205,7 +199,6 @@ const calPlayerResult = () => {
     playerCardsRank[playerCardsRank.length - 1] - playerCardsRank[0] === 4
     && playerCardsRank[3] - playerCardsRank[2] === 1
   ) {
-    console.log('straight');
     output('You got a straight!');
     result = 'yes';
   }
@@ -214,7 +207,6 @@ const calPlayerResult = () => {
     && playerCardsRank[1] === 10
     && hasAce === 'yes'
   ) {
-    console.log('ace straight');
     output('You got an ace straight');
     result = 'yes';
   }
@@ -223,7 +215,6 @@ const calPlayerResult = () => {
   let fullHouse = '';
   for (cardName in cardNameTally) {
     if (cardNameTally[cardName] === 3) {
-      console.log('three of a kind');
       fullHouse = 'half';
       output('You got three of a kind');
       result = 'yes';
@@ -233,7 +224,6 @@ const calPlayerResult = () => {
   // Full house win conditions
   for (cardName in cardNameTally) {
     if (fullHouse === 'half' && cardNameTally[cardName] === 2) {
-      console.log('full house');
       output('You got a full house');
       result = 'yes';
     }
@@ -247,14 +237,12 @@ const calPlayerResult = () => {
     }
   }
   if (twoPair === 2) {
-    console.log('two pair');
     output('You got two pairs');
     result = 'yes';
   }
 
   // One pair win condition
   if (twoPair === 1) {
-    console.log('one pair');
     output('You got a pair!');
     result = 'yes';
   }
