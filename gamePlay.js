@@ -1,4 +1,3 @@
-/* eslint-disable */
 // To-do
 // [DONE] order of cards when discarded
 // winning conditions double check
@@ -11,6 +10,8 @@
 // [DONE] Don’t add comments to code that are self explanatory
 // After discarding once and displaying result once, how to continue with current set
 // Only replacing 1 card
+
+/* eslint-disable */ 
 
 const getRandomIndex = (max) => Math.floor(Math.random() * max);
 
@@ -281,7 +282,7 @@ const displayCards = () => {
     cardContainer.appendChild(playerCardElements[i]);
   }
 };
-const clickCardEventListener = () => {
+const addDiscard = () => {
   for (let i = 0; i < playerCardObjects.length; i++) {
     playerCardElements[i].addEventListener('click', () => discardCards(i));
   }
@@ -299,25 +300,28 @@ const dealCards = () => {
 };
 
 /**
- * Main function run when Deal button is clicked, enabling the display of the initial hand, discarding and replacement of cards and display of final result
+ * Main function run when Deal button is clicked, enabling the display of the initial hand,
+ *  discarding and replacement of cards and display of final result
  */
 
-playerDealButtonClick = () => {
+const playerDealButtonClick = () => {
   if (gameState === 'dealing cards') {
     dealCards();
     displayCards();
-    clickCardEventListener();
+    addDiscard();
     gameState = 'replacing cards';
   } else if (gameState === 'replacing cards') {
     for (let i = 0; i < playerCardObjects.length; i++) {
       if (playerCardElements[i].classList.contains('flipcard')) {
         playerCardNew = deck.pop();
         playerCardObjects[i] = playerCardNew;
-        console.log(playerCardObjects[i]);
+        playerCardElements[i].remove()
         playerCardElements[i] = createCard(playerCardObjects[i]);
-        console.log('test');
-        displayCards();
+        console.log("test")
+        // playerCardElements.splice(i, 0, playerCardElements[i]);
+        console.log(playerCardElements)
       }
+      cardContainer.appendChild(playerCardElements[i])
       calPlayerResult();
     }
   }
@@ -361,4 +365,3 @@ resetButton.addEventListener('click', () => {
   playerDiscardedCards = [];
   output('Click draw to try again');
 });
-/* eslint-disable */
