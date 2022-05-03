@@ -9,7 +9,7 @@
 // [DONE]Have your functions and variables clearly named
 // [DONE] Don’t add comments to code that are self explanatory
 // After discarding once and displaying result once, how to continue with current set
-// Only replacing 1 card
+// [DONE] Only replacing 1 card
 
 /* eslint-disable */ 
 
@@ -259,29 +259,23 @@ const calPlayerResult = () => {
  */
 const discardCards = (i) => {
   playerDiscardedCards.push(playerCardObjects[i]);
-  // for (let i = 0; i < playerCardObjects.length; i++) {
-  // if (playerCardElements[i].innerText === "Discard") {
-  //   playerCardElements[i] = createCard(playerCardObjects[i]);
-
-  //   // playerCardNew = deck.pop();
-  //   // playerCardObjects[i] = playerCardNew;
-  //   // playerCardElements[i] = createCard(playerCardObjects[i]);
-  //   // // displayCards();
-  // } else {
-  // playerCardElements[i].innerText = "Discard";
   playerCardElements[i].classList.toggle('flipcard');
 };
 
 /**
  * Helper function to display the current player hand in cardContainer within the page and enables the clicking of cards to discard them via the discardCard function
  */
-const displayCards = () => {
+const displayInitialCards = () => {
   cardContainer.innerHTML = '';
   for (let i = 0; i < playerCardObjects.length; i++) {
     playerCardElements[i] = createCard(playerCardObjects[i]);
     cardContainer.appendChild(playerCardElements[i]);
   }
 };
+
+/**
+ * If card is clicked, it is greyed out and set to be discarded
+ */
 const addDiscard = () => {
   for (let i = 0; i < playerCardObjects.length; i++) {
     playerCardElements[i].addEventListener('click', () => discardCards(i));
@@ -300,6 +294,23 @@ const dealCards = () => {
 };
 
 /**
+ * Replace cards that have been selected for discard/greyed out
+ */
+const replaceCards = ()=>{
+  for (let i = 0; i < playerCardObjects.length; i++) {
+      if (playerCardElements[i].classList.contains('flipcard')) {
+        playerCardNew = deck.pop();
+        playerCardObjects[i] = playerCardNew;
+        playerCardElements[i].remove()
+        playerCardElements[i] = createCard(playerCardObjects[i]);
+      }
+      cardContainer.appendChild(playerCardElements[i])
+
+      calPlayerResult();
+}
+}
+
+/**
  * Main function run when Deal button is clicked, enabling the display of the initial hand,
  *  discarding and replacement of cards and display of final result
  */
@@ -307,23 +318,11 @@ const dealCards = () => {
 const playerDealButtonClick = () => {
   if (gameState === 'dealing cards') {
     dealCards();
-    displayCards();
+    displayInitialCards();
     addDiscard();
     gameState = 'replacing cards';
   } else if (gameState === 'replacing cards') {
-    for (let i = 0; i < playerCardObjects.length; i++) {
-      if (playerCardElements[i].classList.contains('flipcard')) {
-        playerCardNew = deck.pop();
-        playerCardObjects[i] = playerCardNew;
-        playerCardElements[i].remove()
-        playerCardElements[i] = createCard(playerCardObjects[i]);
-        console.log("test")
-        // playerCardElements.splice(i, 0, playerCardElements[i]);
-        console.log(playerCardElements)
-      }
-      cardContainer.appendChild(playerCardElements[i])
-      calPlayerResult();
-    }
+    replaceCards();
   }
 };
 
